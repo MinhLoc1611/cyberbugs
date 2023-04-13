@@ -4,7 +4,7 @@ import {useSelector,useDispatch} from 'react-redux'
 
 export default function DrawerCyberbugs(props) {
 
-    const {setOpen,ComponentContentDrawer,callBackSubmit} = useSelector(state=>state.DrawerReducer)
+    const {setOpen,ComponentContentDrawer,callBackSubmit,title} = useSelector(state=>state.DrawerReducer)
 
     const dispatch = useDispatch();
 
@@ -17,7 +17,7 @@ export default function DrawerCyberbugs(props) {
     return (
         <>
             <Drawer
-                title="Create a new account"
+                title={title}
                 width={720}
                 onClose={onClose}
                 open={setOpen}

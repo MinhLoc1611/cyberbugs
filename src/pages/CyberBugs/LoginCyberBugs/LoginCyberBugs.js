@@ -1,5 +1,5 @@
 import React from 'react'
-import { UserOutlined, LockOutlined, TwitterOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Input, Button } from 'antd';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
@@ -30,10 +30,6 @@ function LoginCyberBugs(props) {
                 </div>
                 <div className='text-danger'>{errors.password}</div>
                 <Button htmlType='submit' style={{ minWidth: 300 }} size='large' className='mt-4 btn-info'>Login</Button>
-                <div className='social mt-3 d-flex'>
-                    <Button type="primary" shape="circle"><span className='font-weight-bold'>F</span></Button>
-                    <Button type="primary ml-3" shape="circle" icon={<TwitterOutlined />}></Button>
-                </div>
             </div>
         </form>
     )
@@ -47,7 +43,7 @@ const LoginCyberBugsWithFormik = withFormik({
     }),
     validationSchema: Yup.object().shape({
         email: Yup.string().required('Email is required!').email('email is invalid!'),
-        password: Yup.string().min(6, 'password must have min 32 characters').max(16, 'password have max 32 characters')
+        password: Yup.string().min(6, 'password must have min 6 characters').max(32, 'password have max 32 characters')
     }),
 
     handleSubmit: ({ email, password }, { props, setSubmitting }) => {

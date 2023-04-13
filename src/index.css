@@ -405,6 +405,7 @@
     padding: 5px;
     border-radius: 5px;
     flex-basis: 50%;
+    width: 100%;
   }
   
   .item .avatar img {

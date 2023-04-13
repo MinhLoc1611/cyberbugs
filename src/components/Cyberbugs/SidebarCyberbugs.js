@@ -6,11 +6,16 @@ import {
     PlusOutlined
   } from '@ant-design/icons';
   import { Layout, Menu, theme } from 'antd';
+import { useDispatch } from 'react-redux';
+import FormCreateTask from '../Forms/FormCreateTask/FormCreateTask';
+import { OPEN_FORM_EDIT } from '../../redux/constants/CyberBugs/CyberBugs';
 
   const { Header, Sider, Content } = Layout;
 
 export default function SidebarCyberbugs() {
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
+
+    const dispatch = useDispatch();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -27,7 +32,14 @@ export default function SidebarCyberbugs() {
             {
               key: '1',
               icon: <PlusOutlined />,
-              label: 'Create issue',
+              label: 'Create Task',
+              onClick:()=>{
+                dispatch({
+                    type:OPEN_FORM_EDIT,
+                    Component:<FormCreateTask/>,
+                    title:'Create Task'
+                })
+              }
             },
             {
               key: '2',

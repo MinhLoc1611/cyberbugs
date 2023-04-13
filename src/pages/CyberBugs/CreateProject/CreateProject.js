@@ -25,7 +25,7 @@ function CreateProject(props) {
 
     useEffect(() => {
         dispatch({ type: GET_ALL_PROJECT_CATEGORY_SAGA })
-    },);
+    },[]);
 
 
     return (

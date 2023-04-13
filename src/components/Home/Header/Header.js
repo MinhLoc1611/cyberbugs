@@ -26,25 +26,20 @@ export default function Header() {
                         </NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink activeClassName="activeNavItem" className="nav-link" to="/about">
-                            About
-                        </NavLink>
-                    </li>
-                    <li className="nav-item">
-                        <NavLink activeClassName="activeNavItem" className="nav-link" to="/contact">Contact</NavLink>
-                    </li>
-                    <li className="nav-item">
                         <NavLink activeClassName="activeNavItem" className="nav-link" to="/login">Login</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink activeClassName="activeNavItem" className="nav-link" to="/cyberbugs">CyberBugs</NavLink>
+                        <NavLink activeClassName="activeNavItem" className="nav-link" to="/signup">Register</NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink activeClassName="activeNavItem" className="nav-link" to="/projectmanagement">Clone Jira</NavLink>
                     </li>
                     <li className="nav-item dropdown">
                         <a className="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bài tập</a>
                         <div className="dropdown-menu" aria-labelledby="dropdownId">
-                        <NavLink className="dropdown-item" to="/todolistrcc">To do list RCC</NavLink>
-                        <NavLink className="dropdown-item" to="/todolistrfc">To do list RFC</NavLink>
                         <NavLink className="dropdown-item" to="/demohocmodal">Demo HOC Modal</NavLink>
+                        <NavLink className="dropdown-item" to="/dragdrop">Drag Drop</NavLink>
+                        <NavLink className="dropdown-item" to="/dragdropdnd">Drag Drop DnD</NavLink>
                         </div>
                     </li>
 

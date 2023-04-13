@@ -3,7 +3,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { useDispatch, connect, useSelector } from 'react-redux';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
-import { GET_ALL_PROJECT_CATEGORY_SAGA } from '../../../redux/constants/CyberBugs/CyberBugs';
+import { GET_ALL_PROJECT_CATEGORY_SAGA, SET_SUBMIT_EDIT } from '../../../redux/constants/CyberBugs/CyberBugs';
 
 function FormEditProject(props) {
 
@@ -27,7 +27,7 @@ function FormEditProject(props) {
         dispatch({ type: GET_ALL_PROJECT_CATEGORY_SAGA })
         
         dispatch({
-            type:'SET_SUBMIT_EDIT_PROJECT',
+            type:SET_SUBMIT_EDIT,
             submitFunction:handleSubmit
         })
     })

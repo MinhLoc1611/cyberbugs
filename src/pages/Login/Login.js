@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Prompt } from 'react-router-dom';
+import {history} from '../../util/libs/history'
 
 
 
@@ -47,7 +48,7 @@ export default function Login(props) {
             //  props.history.push('/home');
             //replace thay đổi nội dung path tương ứng
             // props.history.replace('/home');
-            props.history.goBack();
+            history.push('/')
             localStorage.setItem('userLogin',JSON.stringify(userLogin))
 
         }else {

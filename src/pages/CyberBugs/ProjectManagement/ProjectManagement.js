@@ -1,22 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Button, Input, Space, Table, Tag, Popconfirm, Avatar, Popover, AutoComplete } from 'antd';
-import { EditOutlined, DeleteOutlined, SearchOutlined, UserAddOutlined } from '@ant-design/icons'
+import { EditOutlined, DeleteOutlined, SearchOutlined, UserAddOutlined, CloseOutlined } from '@ant-design/icons'
 import Highlighter from 'react-highlight-words';
 import { useSelector, useDispatch } from 'react-redux';
-import { GET_LIST_PROJECT_SAGA } from '../../../redux/constants/CyberBugs/CyberBugs';
+import { GET_LIST_PROJECT_SAGA, OPEN_FORM_EDIT } from '../../../redux/constants/CyberBugs/CyberBugs';
 import FormEditProject from '../../../components/Forms/FormEditProject/FormEditProject';
+import { NavLink } from 'react-router-dom';
 
 
 export default function ProjectManagement() {
 
-    const {projectList} = useSelector(state => state.ProjectCyberBugsReducer);
-    const {userSearch} = useSelector(state=>state.UserCyberBugReducer)
+    const projectList = useSelector(state => state.ProjectCyberBugsReducer.projectList);
+    const userSearch = useSelector(state => state.UserCyberBugReducer.userSearch);
+    const [value, setValue] = useState();
+
+    const searchRef = useRef(null);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch({ type: GET_LIST_PROJECT_SAGA })
-    },)
+    },[])
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
@@ -139,6 +143,9 @@ export default function ProjectManagement() {
             title: 'ProjectName',
             dataIndex: 'projectName',
             key: 'projectName',
+            render:(text,record,index)=>{
+                return <NavLink to={`/projectdetail/${record.id}`}>{text}</NavLink>
+            },
             sorter: (item2, item1) => {
                 let projectName1 = item1.projectName?.trim().toLowerCase();
                 let projectName2 = item2.projectName?.trim().toLowerCase();
@@ -147,7 +154,6 @@ export default function ProjectManagement() {
                 }
                 return 1;
             },
-            ...getColumnSearchProps('projectName'),
         },
         {
             title: 'Category',
@@ -184,24 +190,73 @@ export default function ProjectManagement() {
             render: (text, record, index) => {
                 return <div>
                     {record.members?.slice(0, 3).map((member, index) => {
-                        return <Avatar src={member.avatar} key={index} />
+                        return <Popover key={index} placement='top' title={'Members'} content={() => {
+                            return <table className='table'>
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Avatar</th>
+                                        <th>name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {record.members?.map((item, index) => {
+                                      return  <tr key={index}>
+                                            <th>{item.userId}</th>
+                                            <th><img src={item.avatar} alt={item.id} width='30' height='30' style={{borderRadius:'50%'}}/></th>
+                                            <th>{item.name}</th>
+                                            <th>
+                                            <Button onClick={()=>{
+                                                dispatch({
+                                                    type:'REMOVE_USER_PROJECT_API',
+                                                    userProject:{
+                                                        userId:item.userId,
+                                                        projectId:record.id
+                                                    }
+                                                })
+                                            }} type="primary" shape='circle' danger icon={<CloseOutlined />} size='large' />
+                                            </th>
+                                        </tr>
+                                    })}
+                                </tbody>
+                            </table>
+                        }}>
+                            <Avatar src={member.avatar} key={index} />
+                        </Popover>
                     })}
                     {record.members?.length > 3 ? <Avatar>...</Avatar> : ''}
-                    <Popover placement="leftTop" title={'Add user'} content={()=>{
-                        return <AutoComplete 
-                        // options={userSearch?.map((user,index)=>{
-                        //     return {label:user.name,value:user.userId}
-                        // })}
-                        // onSelect={(value,option)=>{
-                        //     console.log('userId',value)
-                        //     console.log('option',option)
-                        // }}
-                        style={{width:'100%'}} onSearch={(value)=>{
-                            dispatch({
-                                type:'GET_USER_API',
-                                keyWord:value
-                            })
-                        }}/>
+                    <Popover placement="leftTop" title={'Add user'} content={() => {
+                        return <AutoComplete
+                            options={userSearch?.map((user, index) => {
+                                return { label: user.name, value: user.userId.toString() }
+                            })}
+                            value={value}
+                            onChange={(text) => {
+                                setValue(text)
+                            }}
+                            onSelect={(valueSelect, option) => {
+                                setValue(option.label)
+                                dispatch({
+                                    type: 'ADD_USER_PROJECT_API',
+                                    userProject: {
+                                        projectId: record.id,
+                                        userId: valueSelect
+                                    }
+                                })
+                            }}
+                            style={{ width: '100%' }} onSearch={(value) => {
+                                if(searchRef.current){
+                                    clearTimeout(searchRef.current);
+                                }
+                                searchRef.current = setTimeout(()=>{
+                                    dispatch({
+                                        type: 'GET_USER_API',
+                                        keyWord: value
+                                    })
+                                },300)
+                                
+                            }} />
                     }} trigger="click">
                         <Button className='btn-success' shape='circle' icon={<UserAddOutlined />}></Button>
                     </Popover>
@@ -215,7 +270,8 @@ export default function ProjectManagement() {
                 <Space size="middle">
                     <Button onClick={() => {
                         const action = {
-                            type: 'OPEN_FORM_EDIT_PROJECT',
+                            type: OPEN_FORM_EDIT,
+                            title:'Edit Project',
                             Component: <FormEditProject />
                         }
                         dispatch(action)
@@ -243,7 +299,7 @@ export default function ProjectManagement() {
     ];
     return <div className='container-fluid mt-5'>
         <h3>Project Management</h3>
-        <Table columns={columns} rowKey={'id'} dataSource={projectList} />;
+        <Table columns={columns} rowKey={'id'} dataSource={projectList} />
     </div>
 
 }

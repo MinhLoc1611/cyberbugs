@@ -26,6 +26,10 @@ export default function MenuCyberbugs() {
                     <i className="fa fa-cog mr-1" />
                     <NavLink className='text-dark' activeClassName='active font-weight-bold' to='/createproject'>Create Project</NavLink>
                 </div>
+                <div>
+                    <i className="fa fa-user-alt"></i>
+                    <NavLink className='text-dark' activeClassName='active font-weight-bold' to='/usermanagement'>User Management</NavLink>
+                </div>
             </div>
             <div className="feature">
                 <div>
